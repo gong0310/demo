@@ -26,33 +26,34 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 0, 10); //x y z
 scene.add(camera);
 
-
-
-// 导入纹理
-const textureLoader= new THREE.TextureLoader()
-textureLoader.load()
-
 // 4、添加物体
 
-const cubeGeometry = new THREE.BoxGeometry(1,1,1) // 几何体
-const basicMaterial = new THREE.MeshBasicMaterial({color: '#ffff00'}); // 材质
+for (let i = 0; i < 50; i++) {
+  // 一个三角形需要3个顶点，每个顶点需要3个值xyz
 
-// 根据几何体、材质创建物体
-const cube = new THREE.Mesh(cubeGeometry, basicMaterial);
-scene.add(cube);
+  const geometry = new THREE.BufferGeometry(); // 创建几何体
+  const positionArray = new Float32Array(9); // 点创面，三角形
+  for (let j = 0; j < 9; j++) {
+    positionArray[j] = Math.random() * 10 - 5;
+  }
 
+  // itemSize = 3 因为每个顶点都是一个三元组。
+  geometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(positionArray, 3)
+  );
 
-
-
-
-
-
-
-
-
-
-
-
+  let color = new THREE.Color(Math.random(), Math.random(), Math.random());
+  const material = new THREE.MeshBasicMaterial({
+    color: color,
+    transparent: true,
+    opacity: 0.5,
+  });
+  // 根据几何体、材质创建物体
+  const cube = new THREE.Mesh(geometry, material);
+  console.log("cube", cube, geometry);
+  scene.add(cube);
+}
 // 创建轨道控制器，围绕物体进行旋转
 const controls = new OrbitControls(camera, renderer.domElement); // 将要被控制的相机，用于事件监听的HTML元素
 // 设置控制器阻尼（惯性）让控制器带来重量感
